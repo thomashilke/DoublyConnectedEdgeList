@@ -28,6 +28,11 @@ namespace Ethereality.DoublyConnectedEdgeList
             var halfEdges = CreateHalfEdges(enumeratedEdges, verticesDictionary);
             var faces = CreateFaces(halfEdges);
 
+            foreach (var vertex in verticesDictionary.Values)
+            {
+                vertex.HalfEdges.Sort((he1, he2) => _coincidentEdgeComparer.Compare(he1.OriginalSegment, he2.OriginalSegment));
+            }
+
             return new Dcel<TEdge, TPoint>(verticesDictionary.Values.Distinct(), halfEdges, faces);
         }
 
@@ -35,7 +40,7 @@ namespace Ethereality.DoublyConnectedEdgeList
         {
             var result = new Dictionary<TPoint, Vertex<TEdge, TPoint>>();
             var allPoints = edges.SelectMany(edge => new[] {edge.PointA, edge.PointB});
-            
+
             foreach (var point in allPoints)
             {
                 if (result.ContainsKey(point))
