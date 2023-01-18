@@ -1,0 +1,8 @@
+mode: ContinuousDeployment
+branches:
+  master:
+    regex: ^master$|^main$
+    tag: beta
+ignore:
+  sha: []
+merge-message-formats: {}
