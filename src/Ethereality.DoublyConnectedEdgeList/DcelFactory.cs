@@ -99,30 +99,19 @@ namespace Ethereality.DoublyConnectedEdgeList
 
             foreach (var halfEdgesList in verticesHalfEdgeLists)
             {
-                for (var i = 0; i < halfEdgesList.Count - 1; i++)
+                for (var i = 0; i < halfEdgesList.Count; i++)
                 {
                     var e1 = halfEdgesList[i];
-                    var e2 = halfEdgesList[i + 1];
+                    var e2 = halfEdgesList[(i + 1) % halfEdgesList.Count];
 
                     if (e1.Twin is null)
                     {
                         throw new InvalidOperationException($"There was no twin attached to half edge {e1}.");
                     }
 
-                    e1.Twin.Next = e2;
-                    e2.Previous = e1.Twin;
+                    e1.Previous = e2.Twin;
+                    e2.Twin.Next = e1;
                 }
-
-                var he1 = halfEdgesList.Last();
-                var he2 = halfEdgesList.First();
-
-                if (he1.Twin is null)
-                {
-                    throw new InvalidOperationException($"There was no twin attached to half edge {he1}.");
-                }
-
-                he1.Twin.Next = he2;
-                he2.Previous = he1.Twin;
             }
         }
 
